@@ -4,7 +4,7 @@ Ansible module to configure the bhyve hypervisor using `vm-bhyve` commands.
 
 ## Features
 
-You can use this module to create virtual switches and attach interfaces to them. Other commands and options are not supported. The available options provide declarative alternatives to running the following commands in a playbook.
+You can use this module to create virtual switches and attach interfaces to them. Other commands and options are not supported. The available options provide declarative alternatives to running the following commands directly in a playbook.
 
 - `vm switch create <switch>`
 - `vm switch add <switch> <interface>`
@@ -44,54 +44,62 @@ interfaces:
 Ensure a switch called public exists and is attached to interface em0 and no other interfaces.
 
 ```yaml
-switch: public
-state: present
-interfaces: em0
+- name: create a switch
+  vm-bhyve:
+    switch: public
+    state: present
+    interfaces: em0
 ```
 
 Ensure the switch called public does not exist, destroying it if it does.
 
 ```yaml
-switch: public
-switch: public
-state: absent
+- name: destroy a switch
+  vm-bhyve:
+    switch: public
+    state: absent
 ```
 
 Add interfaces to an existing switch called public, creating the switch if it doesn't exist.
 
 ```yaml
-switch: public
-switch: public
-state: value_present
-interfaces:
-- em1
-- em2
+- name: update a switch
+  vm-bhyve:
+    switch: public
+    state: value_present
+    interfaces:
+    - em1
+    - em2
 ```
 
 Remove an interface from an existing switch called public.
 
 ```yaml
-switch: public
-switch: public
-state: value_absent
-interfaces: em1
+- name: update a switch
+  vm-bhyve:
+    switch: public
+    state: value_absent
+    interfaces: em1
 ```
 
 Create a switch called public wth interfaces em0 and em1 and update it so that it has interfaces em0 and em3, removing em1.
 
 ```yaml
-switch: public
-switch: public
-state: present
-interfaces:
-- em0
-- em1
+- name: create a switch
+  vm-bhyve:
+    switch: public
+    state: present
+    interfaces:
+    - em0
+    - em1
 
-switch: public
-state: present
-interfaces:
-- em0
-- em3
+- name: reconfigure a switch
+  vm-bhyve:
+    switch: public
+    state: present
+    interfaces:
+    - em0
+    - em3
 ```
 
 ## To Do
