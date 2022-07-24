@@ -68,8 +68,8 @@ Add interfaces to an existing switch called public, creating the switch if it do
     switch: public
     state: value_present
     interfaces:
-    - em1
-    - em2
+      - em1
+      - em2
 ```
 
 Remove an interface from an existing switch called public.
@@ -90,16 +90,16 @@ Create a switch called public wth interfaces em0 and em1 and update it so that i
     switch: public
     state: present
     interfaces:
-    - em0
-    - em1
+      - em0
+      - em1
 
 - name: reconfigure a switch
   vm-bhyve:
     switch: public
     state: present
     interfaces:
-    - em0
-    - em3
+      - em0
+      - em3
 ```
 
 ## To Do
