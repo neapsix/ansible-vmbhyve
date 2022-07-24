@@ -1,0 +1,124 @@
+- name: test vm-bhyve module
+  hosts: freebsd
+  remote_user: ansible
+  become: yes
+
+  tasks:
+    - name: create a switch
+      vm-bhyve:
+        switch: test0
+        state: present
+        interfaces: igb0
+      register: results
+
+    - debug:
+        var: results
+
+    - name: add an interface to a switch
+      vm-bhyve:
+        switch: test0
+        state: value_present
+        interfaces: igb1
+      register: results
+
+    - debug:
+        var: results
+
+    - name: add an interface to a switch (already present)
+      vm-bhyve:
+        switch: test0
+        state: value_present
+        interfaces: igb1
+      register: results
+
+    - debug:
+        var: results
+
+    - name: remove an interface from a switch
+      vm-bhyve:
+        switch: test0
+        state: value_absent
+        interfaces: igb0
+      register: results
+
+    - debug:
+        var: results
+
+    - name: redefine the switch with different interfaces
+      vm-bhyve:
+        switch: test0
+        state: present
+        interfaces: igb0
+      register: results
+
+    - debug:
+        var: results
+
+    # TODO: This should be failure case: require interfaces specified with value_present or value_absent
+    - name: remove an interface from a switch but don't specify an interface
+      vm-bhyve:
+        switch: test0
+        state: value_absent
+      register: results
+
+    - debug:
+        var: results
+
+    - name: destroy a switch
+      vm-bhyve:
+        switch: test0
+        state: absent
+      register: results
+
+    - debug:
+        var: results
+
+    - name: create a switch with interfaces in a different way
+      vm-bhyve:
+        switch: test0
+        state: value_present
+        interfaces:
+          - igb0
+      register: results
+
+    - debug:
+        var: results
+
+    - name: create a switch without interfaces
+      vm-bhyve:
+        switch: test1
+        state: present
+      register: results
+
+    - debug:
+        var: results
+
+    # TODO: This should be a failure case: require interfaces specified with value_present or value_absent
+    - name: create a switch without interfaces in a different way
+      vm-bhyve:
+        switch: test2
+        state: value_present
+      register: results
+
+    - debug:
+        var: results
+
+    - name: clean up
+      vm-bhyve:
+        switch: test0
+        state: absent
+
+    - name: clean up
+      vm-bhyve:
+        switch: test1
+        state: absent
+
+    - name: clean up
+      vm-bhyve:
+        switch: test2
+        state: absent
+
+    - name: clean up
+      vm-bhyve:
+        switch: test3
+        state: absent
